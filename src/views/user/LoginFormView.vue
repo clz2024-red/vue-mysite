@@ -134,23 +134,29 @@ export default {
                 responseType: 'json' //수신타입
             }).then(response => {
                 console.log(response); //수신데이타
-                
-                //로그인사용자 정보
-                let authUser = response.data;
 
-                // token 응답문서의 헤더에 있음    
-                //"Authorization Bearer fdjafdjaslfdjalfjda.ajfdkfjdlsafd.fdjksfjdal"                
-                const token = response.headers.authorization.split(" ")[1];
-                
-                //vuex저장
-                this.$store.commit("setAuthUser", authUser);
-                this.$store.commit("setToken", token);
+                if (response.data.result == "success") {
 
-                console.log(authUser);
-                console.log(token); 
+                    //로그인사용자 정보
+                    let authUser = response.data.apiData;
 
-                this.$router.push("/");
+                    // token 응답문서의 헤더에 있음    
+                    //"Authorization Bearer fdjafdjaslfdjalfjda.ajfdkfjdlsafd.fdjksfjdal"                
+                    const token = response.headers.authorization.split(" ")[1];
 
+                    //vuex저장
+                    this.$store.commit("setAuthUser", authUser);
+                    this.$store.commit("setToken", token);
+
+                    console.log(authUser);
+                    console.log(token);
+
+                    this.$router.push("/");
+
+                } else {
+                    console.log(response.data.message);
+                    alert("아이디 패스워드를 확인하세요");
+                }
 
             }).catch(error => {
                 console.log(error);

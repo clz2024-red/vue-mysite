@@ -145,7 +145,7 @@ export default {
         };
     },
     methods: {
-        login() {
+        getAuthUser() {
             axios({
                 method: 'get', // put, post, delete
                 url: 'http://localhost:9000/api/users/modify',
@@ -159,9 +159,18 @@ export default {
 
                 responseType: 'json' //수신타입
             }).then(response => {
-                console.log(response); //수신데이타
-                this.userVo = response.data;
+                //data.apiData >  userVo
+                
+                if (response.data.result == "success") {
+                    console.log(response); //수신데이타 
+                    this.userVo = response.data.apiData;
 
+                }else {
+                    console.log("토큰X, 비로그인, 변조");
+                    alert("로그인해주세요");
+                    this.$router.push("/user/modifyform");
+                }   
+                
             }).catch(error => {
                 console.log(error);
             });
@@ -236,7 +245,7 @@ export default {
 
     },
     created() {
-        this.login();
+        this.getAuthUser();
     }
 };
 </script>
