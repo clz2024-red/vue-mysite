@@ -182,14 +182,51 @@ export default {
 
                 responseType: 'json' //수신타입
             }).then(response => {
+                console.log("-------------------------"); 
                 console.log(response); //수신데이타
-                
-                //vuex 의 이름을 변경
-                //메인으로 이동
-                
+                console.log("-------------------------"); 
+                console.log(response.data.apiData);
+                console.log("-------------------------"); 
 
-                //현제페이지
+                if(response.data.result == "success"){
+                    console.log("result = success");
+                    let name = response.data.apiData;
 
+                    //vuex 의 이름을 변경
+                    this.$store.commit("setAuthName", name);
+
+                    //메인으로 이동
+                    this.$router.push("/");
+
+                }else {
+                    console.log("result = fail");
+                    console.log(response.data.message);
+                    this.$store.commit("setAuthUser", null);
+                    this.$store.commit("setToken", null);
+                }
+
+
+                //
+                /*
+                if(name != "fail"){
+                    console.log(name)
+                    //vuex 의 이름을 변경
+                    this.$store.commit("setAuthName", name);
+
+                    //메인으로 이동
+                    this.$router.push("/");
+                
+                }else { //토큰오류, 로그인되지 않은상황
+                    //vux token, authVo 삭제
+                    //메인으로 이동
+                    console.log("실패일때"); 
+                    alert("로그인하세요");
+                    this.$store.commit("setAuthUser", null);
+                    this.$store.commit("setToken", null);
+                   
+                    //this.$router.push("/user/loginform");
+                }
+                */
 
             }).catch(error => {
                 console.log(error);
