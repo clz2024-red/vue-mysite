@@ -46,12 +46,12 @@
                 <div id="content">
 
                     <div id="content-head">
-                        <h3>로그인</h3>
+                        <h3>회원정보</h3>
                         <div id="location">
                             <ul>
                                 <li>홈</li>
                                 <li>회원</li>
-                                <li class="last">로그인</li>
+                                <li class="last">회원정보</li>
                             </ul>
                         </div>
                         <div class="clear"></div>
@@ -59,32 +59,53 @@
                     <!-- //content-head -->
 
                     <div id="user">
-                        <div id="loginForm">
-                            <form v-on:submit.prevent="login" action="" method="">
+                        <div id="modifyForm">
+                            <form v-on:submit.prevent="modifyUser" action="" method="">
 
                                 <!-- 아이디 -->
                                 <div class="form-group">
                                     <label class="form-text" for="input-uid">아이디</label>
-                                    <input type="text" id="input-uid" name="id" v-model="userVo.id"
-                                        placeholder="아이디를 입력하세요">
+                                    <span class="text-large bold">{{ userVo.id }}</span>
                                 </div>
 
                                 <!-- 비밀번호 -->
                                 <div class="form-group">
-                                    <label class="form-text" for="input-pass">비밀번호</label>
+                                    <label class="form-text" for="input-pass">패스워드</label>
                                     <input type="text" id="input-pass" name="password" v-model="userVo.password"
                                         placeholder="비밀번호를 입력하세요">
                                 </div>
 
+                                <!-- 이메일 -->
+                                <div class="form-group">
+                                    <label class="form-text" for="input-name">이름</label>
+                                    <input type="text" id="input-name" name="" v-model="userVo.name"
+                                        placeholder="이름을 입력하세요">
+                                </div>
+
+                                <!-- //나이 -->
+                                <div class="form-group">
+                                    <span class="form-text">성별</span>
+
+                                    <label for="rdo-male">남</label>
+                                    <input type="radio" id="rdo-male" name="gender" value="male"
+                                        v-model="userVo.gender">
+
+                                    <label for="rdo-female">여</label>
+                                    <input type="radio" id="rdo-female" name="gender" value="female"
+                                        v-model="userVo.gender">
+
+                                </div>
 
                                 <!-- 버튼영역 -->
                                 <div class="button-area">
-                                    <button type="submit" id="btn-submit">로그인</button>
+                                    <button type="submit" id="btn-submit">회원정보수정</button>
                                 </div>
 
                             </form>
+
+
                         </div>
-                        <!-- //loginForm -->
+                        <!-- //modifyForm -->
                     </div>
                     <!-- //user -->
                 </div>
@@ -101,7 +122,6 @@
         </div>
         <!-- //wrap -->
 
-
     </div>
 </template>
 
@@ -111,23 +131,52 @@ import "@/assets/css/user.css"
 import axios from 'axios';
 
 export default {
-    name: "LoginFormView",
+    name: "ModifyFormView",
     components: {},
     data() {
         return {
             userVo: {
+                no: "",
                 id: "",
-                password: ""
+                password: "",
+                name: "",
+                gender: ""
             }
         };
     },
     methods: {
         login() {
-            console.log("로그인");
             axios({
-                method: 'post', //put, post, delete                   
-                url: 'http://localhost:9000/api/users/login',
-                headers: { "Content-Type": "application/json; charset=utf-8" }, //전송타입
+                method: 'get', // put, post, delete
+                url: 'http://localhost:9000/api/users/modify',
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                    "Authorization": "Bearer " + this.$store.state.token
+                }, //전송타입 + 토큰
+
+                //params: guestbookVo, //get방식 파라미터로 값이 전달
+                //data: guestbookVo, //put, post, delete 방식 자동으로 JSON으로 변환 전달
+
+                responseType: 'json' //수신타입
+            }).then(response => {
+                console.log(response); //수신데이타
+                this.userVo = response.data;
+
+            }).catch(error => {
+                console.log(error);
+            });
+        },
+        modifyUser() {
+            console.log("클릭");
+            console.log(this.userVo);
+            //서버로 전송
+            axios({
+                method: 'put', // put, post, delete
+                url: 'http://localhost:9000/api/users/modify',
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                    "Authorization": "Bearer " + this.$store.state.token
+                }, //전송타입 + 토큰
                 //params: guestbookVo, //get방식 파라미터로 값이 전달
                 data: this.userVo, //put, post, delete 방식 자동으로 JSON으로 변환 전달
 
@@ -135,30 +184,25 @@ export default {
             }).then(response => {
                 console.log(response); //수신데이타
                 
-                //로그인사용자 정보
-                let authUser = response.data;
-
-                // token 응답문서의 헤더에 있음    
-                //"Authorization Bearer fdjafdjaslfdjalfjda.ajfdkfjdlsafd.fdjksfjdal"                
-                const token = response.headers.authorization.split(" ")[1];
+                //vuex 의 이름을 변경
+                //메인으로 이동
                 
-                //vuex저장
-                this.$store.commit("setAuthUser", authUser);
-                this.$store.commit("setToken", token);
 
-                console.log(authUser);
-                console.log(token); 
-
-                this.$router.push("/");
+                //현제페이지
 
 
             }).catch(error => {
                 console.log(error);
             });
 
-
         }
 
     },
+    created() {
+        this.login();
+    }
 };
 </script>
+
+
+<style></style>

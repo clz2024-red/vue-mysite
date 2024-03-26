@@ -13,7 +13,11 @@ export default createStore({
         },
         setToken(state, payload){
             state.token = payload;
+        },
+        setAuthName(){
+            
         }
+
     },
     plugins: [
         createPersistedState({
