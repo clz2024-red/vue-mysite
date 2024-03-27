@@ -128,13 +128,14 @@ export default {
                 console.log(response.data.apiData); //수신데이타
                 let saveName = response.data.apiData;
 
-                this.$router.push(
-                    {
-                        path: "/attach/result", 
-                        query: {saveName: saveName} 
-                    }
-                );
-                
+                if (response.data.result == "success") {
+                    this.$router.push(
+                        {
+                            path: "/attach/result",
+                            query: { saveName: saveName }
+                        }
+                    );
+                }
 
             }).catch(error => {
                 console.log(error);
