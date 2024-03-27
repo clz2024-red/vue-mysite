@@ -2,6 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 import MainView from '@/views/main/MainView.vue'
 import LoginFormView from '@/views/user/LoginFormView.vue'
 import ModifyFormView from '@/views/user/ModifyFormView.vue'
+import AttachFormView from '@/views/attach/AttachFormView.vue'
+import AttachResultView from '@/views/attach/AttachResultView.vue'
 
 const routes = [
   {
@@ -18,6 +20,16 @@ const routes = [
     path: '/user/modifyform',
     name: '/user/modifyform',
     component: ModifyFormView
+  },
+  {
+    path: '/attach/form',
+    name: '/attach/form',
+    component: AttachFormView
+  },
+  {
+    path: '/attach/result',
+    name: '/attach/result',
+    component: AttachResultView
   },
   
 ]

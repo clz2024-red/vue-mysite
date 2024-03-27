@@ -2,35 +2,10 @@
     <div>
         <div id="wrap">
 
-            <div id="header" class="clearfix">
-                <h1>
-                    <a href="">MySite</a>
-                </h1>
-
-                <!-- 
-                <ul>
-                    <li>황일영 님 안녕하세요^^</li>
-                    <li><a href="" class="btn_s">로그아웃</a></li>
-                    <li><a href="" class="btn_s">회원정보수정</a></li>
-                </ul>
-                -->
-                <ul>
-                    <li><a href="" class="btn_s">로그인</a></li>
-                    <li><a href="" class="btn_s">회원가입</a></li>
-                </ul>
-
-            </div>
+            <AppHeader />
             <!-- //header -->
-
-            <div id="nav">
-                <ul class="clearfix">
-                    <li><a href="">입사지원서</a></li>
-                    <li><a href="">게시판</a></li>
-                    <li><a href="">갤러리</a></li>
-                    <li><a href="">방명록</a></li>
-                </ul>
-            </div>
             <!-- //nav -->
+
 
             <div id="container" class="clearfix">
                 <div id="aside">
@@ -114,11 +89,8 @@
             </div>
             <!-- //container  -->
 
-            <div id="footer">
-                Copyright ⓒ 2020 황일영. All right reserved
-            </div>
+            <AppFooter />
             <!-- //footer -->
-
         </div>
         <!-- //wrap -->
 
@@ -130,9 +102,15 @@
 import "@/assets/css/user.css"
 import axios from 'axios';
 
+import AppHeader from "@/components/AppHeader.vue"
+import AppFooter from "@/components/AppFooter.vue"
+
 export default {
     name: "ModifyFormView",
-    components: {},
+    components: {
+        AppFooter,
+        AppHeader
+    },
     data() {
         return {
             userVo: {
@@ -160,17 +138,17 @@ export default {
                 responseType: 'json' //수신타입
             }).then(response => {
                 //data.apiData >  userVo
-                
+
                 if (response.data.result == "success") {
                     console.log(response); //수신데이타 
                     this.userVo = response.data.apiData;
 
-                }else {
+                } else {
                     console.log("토큰X, 비로그인, 변조");
+                    this.$router.push("/user/loginform");
                     alert("로그인해주세요");
-                    this.$router.push("/user/modifyform");
-                }   
-                
+                }
+
             }).catch(error => {
                 console.log(error);
             });
@@ -191,13 +169,13 @@ export default {
 
                 responseType: 'json' //수신타입
             }).then(response => {
-                console.log("-------------------------"); 
+                console.log("-------------------------");
                 console.log(response); //수신데이타
-                console.log("-------------------------"); 
+                console.log("-------------------------");
                 console.log(response.data.apiData);
-                console.log("-------------------------"); 
+                console.log("-------------------------");
 
-                if(response.data.result == "success"){
+                if (response.data.result == "success") {
                     console.log("result = success");
                     let name = response.data.apiData;
 
@@ -207,7 +185,7 @@ export default {
                     //메인으로 이동
                     this.$router.push("/");
 
-                }else {
+                } else {
                     console.log("result = fail");
                     console.log(response.data.message);
                     this.$store.commit("setAuthUser", null);
